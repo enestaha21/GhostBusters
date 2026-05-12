@@ -625,7 +625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorScript
   animator: {fileID: 952752516}
   player: {fileID: 152806579}
-  distanceToOpen: 100
+  distanceToOpen: 3
 --- !u!4 &952752515
 Transform:
   m_ObjectHideFlags: 0
