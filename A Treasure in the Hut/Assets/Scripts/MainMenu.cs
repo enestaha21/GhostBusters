@@ -5,11 +5,11 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene();
+        SceneManager.LoadScene("GameScene");
     }
     public void QuitGame()
     {
-        Debug.Log("Oyun başarıyla kapatıldı."); 
-        Application.Quit(); 
+        Debug.Log("Oyun başarıyla kapatıldı.");
+        Application.Quit();
     }
 }
