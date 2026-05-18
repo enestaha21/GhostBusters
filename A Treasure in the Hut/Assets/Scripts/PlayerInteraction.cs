@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -6,10 +7,23 @@ public class PlayerInteraction : MonoBehaviour
     public float interactRange = 3f;
     public Transform holdPoint;
 
+    [Header("UI Settings")]
+    public TextMeshProUGUI interactionText;
+
     private GameObject heldObj;
+
+    void Start()
+    {
+        if (interactionText != null)
+        {
+            interactionText.gameObject.SetActive(false);
+        }
+    }
 
     void Update()
     {
+        CheckUiHover();
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (heldObj == null)
@@ -24,6 +38,29 @@ public class PlayerInteraction : MonoBehaviour
                 }
             }
         }
+    }
+
+    void CheckUiHover()
+    {
+        if (interactionText == null) return;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, interactRange))
+        {
+            if (hit.transform.CompareTag("CanPickUp") && heldObj == null)
+            {
+                interactionText.gameObject.SetActive(true);
+                return;
+            }
+
+            DoorScript door = hit.transform.GetComponentInParent<DoorScript>();
+            if (door != null)
+            {
+                interactionText.gameObject.SetActive(true);
+                return;
+            }
+        }
+        interactionText.gameObject.SetActive(false);
     }
 
     bool LookForInteraction()
