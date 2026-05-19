@@ -1,16 +1,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuManager : MonoBehaviour
+public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("GameScene");
     }
-
     public void QuitGame()
     {
-        Debug.Log("Oyundan çıkıldı");
+        Debug.Log("Oyun başarıyla kapatıldı.");
         Application.Quit();
     }
 }
