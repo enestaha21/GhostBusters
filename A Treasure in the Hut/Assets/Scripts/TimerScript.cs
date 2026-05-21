@@ -10,6 +10,8 @@ public class TimerScript : MonoBehaviour
     public GameObject losePanel;
     public GameObject jumpscareImage;
 
+    public float jumpscareDuration = 2f;
+
     private bool isTimerRunning = true;
 
     void Update()
@@ -52,7 +54,7 @@ public class TimerScript : MonoBehaviour
             jumpscareImage.SetActive(true);
         }
 
-        Invoke("ShowLosePanel", 2f);
+        Invoke("ShowLosePanel", jumpscareDuration);
     }
 
     private void ShowLosePanel()

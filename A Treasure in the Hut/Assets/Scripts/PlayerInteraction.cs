@@ -91,7 +91,17 @@ public class PlayerInteraction : MonoBehaviour
         heldObj.transform.position = holdPoint.position;
         heldObj.transform.parent = holdPoint;
         heldObj.transform.localRotation = Quaternion.identity;
-        Debug.Log("Key picked up!");
+
+        if (heldObj.name == "Fuel")
+        {
+            ObjectiveManager objectiveManager = FindObjectOfType<ObjectiveManager>();
+            if (objectiveManager != null)
+            {
+                objectiveManager.UpdateObjective("Objective: Bring the fuel to the car and escape!");
+            }
+        }
+
+        Debug.Log("Object picked up!");
     }
 
     public void DestroyHeldKey()
@@ -108,6 +118,6 @@ public class PlayerInteraction : MonoBehaviour
         heldObj.GetComponent<Rigidbody>().isKinematic = false;
         heldObj.transform.parent = null;
         heldObj = null;
-        Debug.Log("Key dropped!");
+        Debug.Log("Object dropped!");
     }
 }
