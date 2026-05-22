@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class TimerScript : MonoBehaviour
 {
@@ -9,6 +10,13 @@ public class TimerScript : MonoBehaviour
     public GameObject winPanel;
     public GameObject losePanel;
     public GameObject jumpscareImage;
+
+    [Header("Cinematic Settings")]
+    public GameObject playerObj;
+    public GameObject cinematicGroup;
+    public Animator cinematicAnimator;
+    public string animationTriggerName = "PlayWin";
+    public float winUiDelay = 5f;
 
     public float jumpscareDuration = 2f;
 
@@ -41,6 +49,57 @@ public class TimerScript : MonoBehaviour
         if (!isTimerRunning) return;
 
         isTimerRunning = false;
+
+        if (playerObj != null)
+        {
+            playerObj.SetActive(false);
+        }
+
+        if (cinematicGroup != null)
+        {
+            cinematicGroup.SetActive(true);
+
+            Camera childCam = cinematicGroup.GetComponentInChildren<Camera>(true);
+            if (childCam != null)
+            {
+                childCam.gameObject.SetActive(true);
+            }
+        }
+
+        StartCoroutine(PlayCinematicRoutine());
+
+        Invoke("ShowWinPanel", winUiDelay);
+    }
+
+    private IEnumerator PlayCinematicRoutine()
+    {
+        if (cinematicAnimator != null)
+        {
+            Rigidbody carRb = cinematicAnimator.GetComponent<Rigidbody>();
+            if (carRb != null)
+            {
+                carRb.isKinematic = true;
+                carRb.useGravity = false;
+                carRb.linearVelocity = Vector3.zero;
+                carRb.angularVelocity = Vector3.zero;
+            }
+
+            Collider[] allColliders = cinematicAnimator.GetComponentsInChildren<Collider>();
+            foreach (Collider col in allColliders)
+            {
+                col.enabled = false;
+            }
+
+            cinematicAnimator.enabled = false;
+            yield return new WaitForSeconds(0.1f);
+            cinematicAnimator.enabled = true;
+
+            cinematicAnimator.SetTrigger(animationTriggerName);
+        }
+    }
+
+    private void ShowWinPanel()
+    {
         if (winPanel != null)
         {
             winPanel.SetActive(true);

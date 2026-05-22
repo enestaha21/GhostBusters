@@ -92,12 +92,20 @@ public class PlayerInteraction : MonoBehaviour
         heldObj.transform.parent = holdPoint;
         heldObj.transform.localRotation = Quaternion.identity;
 
+        ObjectiveManager objectiveManager = FindObjectOfType<ObjectiveManager>();
+
         if (heldObj.name == "Fuel")
         {
-            ObjectiveManager objectiveManager = FindObjectOfType<ObjectiveManager>();
             if (objectiveManager != null)
             {
                 objectiveManager.UpdateObjective("Objective: Bring the fuel to the car and escape!");
+            }
+        }
+        else if (heldObj.name == "Key" || heldObj.name.Contains("Key"))
+        {
+            if (objectiveManager != null)
+            {
+                objectiveManager.UpdateObjective("Objective: Open the locked door.");
             }
         }
 
