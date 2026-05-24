@@ -98,14 +98,14 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (objectiveManager != null)
             {
-                objectiveManager.UpdateObjective("Objective: Bring the fuel to the car and escape!");
+                objectiveManager.UpdateObjective("Bring the fuel to the car and escape!");
             }
         }
         else if (heldObj.name == "Key" || heldObj.name.Contains("Key"))
         {
             if (objectiveManager != null)
             {
-                objectiveManager.UpdateObjective("Objective: Open the locked door.");
+                objectiveManager.UpdateObjective("Open the locked door");
             }
         }
 

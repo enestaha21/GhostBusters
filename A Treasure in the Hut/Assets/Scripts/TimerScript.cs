@@ -1,22 +1,29 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class TimerScript : MonoBehaviour
 {
     public TextMeshProUGUI timerText;
-    public float timeRemaining = 300f;
+    public float timeRemaining = 120f;
 
-    public GameObject winPanel;
-    public GameObject losePanel;
+    [Header("Panels (Just for Texts)")]
+    public GameObject winPanel;   
+    public GameObject losePanel;  
     public GameObject jumpscareImage;
+
+    [Header("Scene Names to Load")]
+    public string winSceneName = "WinMenuScene";   
+    public string loseSceneName = "LoseMenuScene"; 
 
     [Header("Cinematic Settings")]
     public GameObject playerObj;
     public GameObject cinematicGroup;
     public Animator cinematicAnimator;
     public string animationTriggerName = "PlayWin";
-    public float winUiDelay = 5f;
+    public float winUiDelay = 5f;       
+    public float timeBeforeSceneLoad = 5f; 
 
     public float jumpscareDuration = 2f;
 
@@ -47,27 +54,18 @@ public class TimerScript : MonoBehaviour
     public void WinGame()
     {
         if (!isTimerRunning) return;
-
         isTimerRunning = false;
 
-        if (playerObj != null)
-        {
-            playerObj.SetActive(false);
-        }
+        if (playerObj != null) playerObj.SetActive(false);
 
         if (cinematicGroup != null)
         {
             cinematicGroup.SetActive(true);
-
             Camera childCam = cinematicGroup.GetComponentInChildren<Camera>(true);
-            if (childCam != null)
-            {
-                childCam.gameObject.SetActive(true);
-            }
+            if (childCam != null) childCam.gameObject.SetActive(true);
         }
 
         StartCoroutine(PlayCinematicRoutine());
-
         Invoke("ShowWinPanel", winUiDelay);
     }
 
@@ -85,15 +83,11 @@ public class TimerScript : MonoBehaviour
             }
 
             Collider[] allColliders = cinematicAnimator.GetComponentsInChildren<Collider>();
-            foreach (Collider col in allColliders)
-            {
-                col.enabled = false;
-            }
+            foreach (Collider col in allColliders) col.enabled = false;
 
             cinematicAnimator.enabled = false;
             yield return new WaitForSeconds(0.1f);
             cinematicAnimator.enabled = true;
-
             cinematicAnimator.SetTrigger(animationTriggerName);
         }
     }
@@ -103,29 +97,36 @@ public class TimerScript : MonoBehaviour
         if (winPanel != null)
         {
             winPanel.SetActive(true);
+            
+            Invoke("LoadWinScene", timeBeforeSceneLoad);
         }
     }
 
     private void TriggerLoss()
     {
-        if (jumpscareImage != null)
-        {
-            jumpscareImage.SetActive(true);
-        }
-
+        if (jumpscareImage != null) jumpscareImage.SetActive(true);
         Invoke("ShowLosePanel", jumpscareDuration);
     }
 
     private void ShowLosePanel()
     {
-        if (jumpscareImage != null)
-        {
-            jumpscareImage.SetActive(false);
-        }
+        if (jumpscareImage != null) jumpscareImage.SetActive(false);
 
         if (losePanel != null)
         {
             losePanel.SetActive(true);
+            
+            Invoke("LoadLoseScene", timeBeforeSceneLoad);
         }
+    }
+
+    private void LoadWinScene()
+    {
+        SceneManager.LoadScene(winSceneName);
+    }
+
+    private void LoadLoseScene()
+    {
+        SceneManager.LoadScene(loseSceneName);
     }
 }
