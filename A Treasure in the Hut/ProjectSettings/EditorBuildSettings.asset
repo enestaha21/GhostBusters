@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Environment_Test.unity
     guid: e120241bcd045ec41a29fef408311502
+  - enabled: 1
+    path: Assets/Scenes/WinMenuScene.unity
+    guid: 8235a368a96ad77439d06b5dfa4a21dd
+  - enabled: 1
+    path: Assets/Scenes/LoseMenuScene.unity
+    guid: de92bf3b46032e54a890a8b2f5043c25
   - enabled: 0
     path: Assets/Scenes/Game.unity
     guid: 292716d0aab72e94eb2634bee2934aa5
