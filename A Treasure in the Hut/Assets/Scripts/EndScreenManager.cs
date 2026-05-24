@@ -4,7 +4,14 @@ using UnityEngine.SceneManagement;
 public class EndScreenManager : MonoBehaviour
 {
     [Header("GameScene")]
-    public string gameSceneName = "Environment_Test"; 
+    public string gameSceneName = "Environment_Test";
+
+    void Start()
+    {
+        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
 
     public void RestartGame()
     {

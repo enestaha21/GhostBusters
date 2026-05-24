@@ -9,23 +9,26 @@ public class TimerScript : MonoBehaviour
     public float timeRemaining = 120f;
 
     [Header("Panels (Just for Texts)")]
-    public GameObject winPanel;   
-    public GameObject losePanel;  
+    public GameObject winPanel;
+    public GameObject losePanel;
     public GameObject jumpscareImage;
 
     [Header("Scene Names to Load")]
-    public string winSceneName = "WinMenuScene";   
-    public string loseSceneName = "LoseMenuScene"; 
+    public string winSceneName = "WinMenuScene";
+    public string loseSceneName = "LoseMenuScene";
 
     [Header("Cinematic Settings")]
     public GameObject playerObj;
     public GameObject cinematicGroup;
     public Animator cinematicAnimator;
     public string animationTriggerName = "PlayWin";
-    public float winUiDelay = 5f;       
-    public float timeBeforeSceneLoad = 5f; 
+    public float winUiDelay = 5f;
+    public float timeBeforeSceneLoad = 5f;
 
     public float jumpscareDuration = 2f;
+
+    [Header("UI Elements to Hide on End")] 
+    public GameObject[] uiElementsToHide;  
 
     private bool isTimerRunning = true;
 
@@ -55,6 +58,8 @@ public class TimerScript : MonoBehaviour
     {
         if (!isTimerRunning) return;
         isTimerRunning = false;
+
+        HideExtraUI(); 
 
         if (playerObj != null) playerObj.SetActive(false);
 
@@ -97,13 +102,15 @@ public class TimerScript : MonoBehaviour
         if (winPanel != null)
         {
             winPanel.SetActive(true);
-            
+
             Invoke("LoadWinScene", timeBeforeSceneLoad);
         }
     }
 
     private void TriggerLoss()
     {
+        HideExtraUI(); 
+
         if (jumpscareImage != null) jumpscareImage.SetActive(true);
         Invoke("ShowLosePanel", jumpscareDuration);
     }
@@ -115,8 +122,20 @@ public class TimerScript : MonoBehaviour
         if (losePanel != null)
         {
             losePanel.SetActive(true);
-            
+
             Invoke("LoadLoseScene", timeBeforeSceneLoad);
+        }
+    }
+
+    
+    private void HideExtraUI()
+    {
+        if (uiElementsToHide != null)
+        {
+            foreach (GameObject ui in uiElementsToHide)
+            {
+                if (ui != null) ui.SetActive(false);
+            }
         }
     }
 

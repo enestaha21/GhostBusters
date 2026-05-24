@@ -39,19 +39,21 @@ public class DoorScript : MonoBehaviour
                 ObjectiveManager objectiveManager = FindObjectOfType<ObjectiveManager>();
                 if (objectiveManager != null)
                 {
-                    objectiveManager.UpdateObjective("Objective: Find the fuel inside the cabin.");
+                    // "Objective:" kısmı kaldırıldı, temiz yazı bırakıldı
+                    objectiveManager.UpdateObjective("Find the fuel inside the cabin");
                 }
 
                 Camera.main.GetComponent<PlayerInteraction>().DestroyHeldKey();
             }
             else
             {
-                Debug.Log("The door is locked. You need to find a key.");
+                Debug.Log("The door is locked. You need to find a key");
 
                 ObjectiveManager objectiveManager = FindObjectOfType<ObjectiveManager>();
                 if (objectiveManager != null)
                 {
-                    objectiveManager.UpdateObjective("Objective: Find the cabin key.");
+                    // "Objective:" kısmı kaldırıldı, temiz yazı bırakıldı
+                    objectiveManager.UpdateObjective("Find the cabin key");
                 }
             }
         }
