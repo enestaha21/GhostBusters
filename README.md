@@ -8,7 +8,7 @@ Miraç Kahraman: Coding, Interior Design(house)
 
 Melih Sarıkaya: Sound, UI
 
-Enes Taha Kayacan: Texure, Level Design
+Enes Taha Kayacan: Texture, Level Design
 
 Game Name: A Treasure in the Hut
 
