@@ -25,10 +25,13 @@ public class TimerScript : MonoBehaviour
     public float winUiDelay = 5f;
     public float timeBeforeSceneLoad = 5f;
 
+    [Header("Jumpscare Settings")] 
+    public float loseTextDuration = 2f;
     public float jumpscareDuration = 2f;
+    public AudioSource jumpscareAudioSource;
 
-    [Header("UI Elements to Hide on End")] 
-    public GameObject[] uiElementsToHide;  
+    [Header("UI Elements to Hide on End")]
+    public GameObject[] uiElementsToHide;
 
     private bool isTimerRunning = true;
 
@@ -59,7 +62,7 @@ public class TimerScript : MonoBehaviour
         if (!isTimerRunning) return;
         isTimerRunning = false;
 
-        HideExtraUI(); 
+        HideExtraUI();
 
         if (playerObj != null) playerObj.SetActive(false);
 
@@ -107,27 +110,32 @@ public class TimerScript : MonoBehaviour
         }
     }
 
+    
     private void TriggerLoss()
     {
-        HideExtraUI(); 
+        HideExtraUI();
 
-        if (jumpscareImage != null) jumpscareImage.SetActive(true);
-        Invoke("ShowLosePanel", jumpscareDuration);
+        
+        if (losePanel != null) losePanel.SetActive(true);
+
+        
+        Invoke("ShowJumpscare", loseTextDuration);
     }
 
-    private void ShowLosePanel()
+    private void ShowJumpscare()
     {
-        if (jumpscareImage != null) jumpscareImage.SetActive(false);
+        
+        if (losePanel != null) losePanel.SetActive(false);
 
-        if (losePanel != null)
-        {
-            losePanel.SetActive(true);
+        
+        if (jumpscareImage != null) jumpscareImage.SetActive(true);
+        if (jumpscareAudioSource != null) jumpscareAudioSource.Play();
 
-            Invoke("LoadLoseScene", timeBeforeSceneLoad);
-        }
+        
+        Invoke("LoadLoseScene", jumpscareDuration);
     }
-
     
+
     private void HideExtraUI()
     {
         if (uiElementsToHide != null)
