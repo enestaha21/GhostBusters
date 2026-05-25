@@ -8,10 +8,18 @@ public class PlayerMovement : MonoBehaviour
     public float mouseSensitivity = 2f;
     public Transform playerCamera;
 
+    [Header("Footstep Settings")]
+    public AudioSource footstepSource;
+    public AudioClip dirtFootstep;
+    public AudioClip woodFootstep;
+    public float walkStepInterval = 0.5f;
+    public float sprintStepInterval = 0.3f;
+
     private CharacterController controller;
     private Vector3 velocity;
     private float xRotation = 0f;
     private bool isSprinting = false;
+    private float stepTimer = 0f;
 
     void Start()
     {
@@ -53,5 +61,54 @@ public class PlayerMovement : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+       
+        bool isMoving = (Mathf.Abs(x) > 0.1f || Mathf.Abs(z) > 0.1f);
+        HandleFootsteps(isMoving);
+    }
+
+    private void HandleFootsteps(bool isMoving)
+    {
+        if (controller.isGrounded && isMoving)
+        {
+            stepTimer -= Time.deltaTime;
+
+            if (stepTimer <= 0f)
+            {
+                PlayFootstepSound();
+                stepTimer = isSprinting ? sprintStepInterval : walkStepInterval;
+            }
+        }
+        else
+        {
+            stepTimer = 0f;
+
+            
+            if (footstepSource != null && footstepSource.isPlaying)
+            {
+                footstepSource.Stop();
+            }
+        }
+    }
+
+    private void PlayFootstepSound()
+    {
+        AudioClip clipToPlay = dirtFootstep;
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 2f))
+        {
+            if (hit.collider.CompareTag("WoodFloor"))
+            {
+                clipToPlay = woodFootstep;
+            }
+        }
+
+        if (footstepSource != null && clipToPlay != null)
+        {
+            
+            footstepSource.clip = clipToPlay;
+            footstepSource.Play();
+        }
     }
 }

@@ -6,6 +6,10 @@ public class FlashlightController : MonoBehaviour
     public GameObject flashlight;
     public TextMeshProUGUI infoText;
 
+    [Header("Audio Settings")]
+    public AudioSource flashlightAudioSource;
+    public AudioClip clickSound;
+
     void Start()
     {
         if (flashlight != null)
@@ -26,6 +30,12 @@ public class FlashlightController : MonoBehaviour
             if (flashlight != null)
             {
                 flashlight.SetActive(!flashlight.activeSelf);
+            }
+
+            
+            if (flashlightAudioSource != null && clickSound != null)
+            {
+                flashlightAudioSource.PlayOneShot(clickSound);
             }
 
             if (infoText != null)

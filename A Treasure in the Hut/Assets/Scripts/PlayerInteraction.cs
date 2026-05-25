@@ -10,6 +10,10 @@ public class PlayerInteraction : MonoBehaviour
     [Header("UI Settings")]
     public TextMeshProUGUI interactionText;
 
+    [Header("Audio Settings")] // <-- YENİ EKLENEN SES KISMI
+    public AudioSource interactionAudioSource;
+    public AudioClip pickupSound;
+
     private GameObject heldObj;
 
     void Start()
@@ -92,13 +96,18 @@ public class PlayerInteraction : MonoBehaviour
         heldObj.transform.parent = holdPoint;
         heldObj.transform.localRotation = Quaternion.identity;
 
+        // <-- EŞYAYI YERDEN ALINCA SESİ ÇAL -->
+        if (interactionAudioSource != null && pickupSound != null)
+        {
+            interactionAudioSource.PlayOneShot(pickupSound);
+        }
+
         ObjectiveManager objectiveManager = FindObjectOfType<ObjectiveManager>();
 
         if (heldObj.name == "Fuel")
         {
             if (objectiveManager != null)
             {
-                
                 objectiveManager.UpdateObjective("Take the fuel to the car and escape!");
             }
         }
@@ -106,7 +115,6 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (objectiveManager != null)
             {
-                
                 objectiveManager.UpdateObjective("Use the key to open the locked door");
             }
         }
