@@ -7,7 +7,7 @@ public class ObjectiveManager : MonoBehaviour
 
     void Start()
     {
-        UpdateObjective("Escape from forest");
+        UpdateObjective("ESCAPE FROM THE FOREST");
     }
 
     public void UpdateObjective(string newObjective)
