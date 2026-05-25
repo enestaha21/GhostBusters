@@ -25,13 +25,18 @@ public class TimerScript : MonoBehaviour
     public float winUiDelay = 5f;
     public float timeBeforeSceneLoad = 5f;
 
-    [Header("Jumpscare Settings")] 
+    [Header("Jumpscare Settings")]
     public float loseTextDuration = 2f;
     public float jumpscareDuration = 2f;
     public AudioSource jumpscareAudioSource;
 
     [Header("UI Elements to Hide on End")]
     public GameObject[] uiElementsToHide;
+
+    [Header("Heartbeat Settings")] // <-- YENİ KALP ATIŞI AYARLARI
+    public AudioSource heartbeatAudioSource;
+    public AudioClip heartbeatClip;
+    private bool hasHeartbeatStarted = false;
 
     private bool isTimerRunning = true;
 
@@ -42,6 +47,19 @@ public class TimerScript : MonoBehaviour
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
+
+            // <-- KONTROL: SON 57 SANİYEYE GİRİLDİ Mİ VE SES DAHA ÖNCE BAŞLAMADI MI? -->
+            if (timeRemaining <= 57f && !hasHeartbeatStarted)
+            {
+                if (heartbeatAudioSource != null && heartbeatClip != null)
+                {
+                    heartbeatAudioSource.clip = heartbeatClip;
+                    heartbeatAudioSource.loop = false; // Kendi içinde hızlandığı için loop yapmıyoruz
+                    heartbeatAudioSource.Play();
+                    hasHeartbeatStarted = true;
+                    Debug.Log("🔊 Kalp atışı hızlanma efekti başladı! Son 57 saniye!");
+                }
+            }
 
             int minutes = Mathf.FloorToInt(timeRemaining / 60f);
             int seconds = Mathf.FloorToInt(timeRemaining % 60f);
@@ -61,6 +79,12 @@ public class TimerScript : MonoBehaviour
     {
         if (!isTimerRunning) return;
         isTimerRunning = false;
+
+        // <-- OYUNCU KAZANDIĞI AN KALP ATIŞINI DURDUR -->
+        if (heartbeatAudioSource != null && heartbeatAudioSource.isPlaying)
+        {
+            heartbeatAudioSource.Stop();
+        }
 
         HideExtraUI();
 
@@ -110,31 +134,30 @@ public class TimerScript : MonoBehaviour
         }
     }
 
-    
     private void TriggerLoss()
     {
+        // <-- SÜRE BİTİP KAYBETTİĞİNDE DE KALP ATIŞINI DURDUR (Jumpscare sesiyle karışmasın) -->
+        if (heartbeatAudioSource != null && heartbeatAudioSource.isPlaying)
+        {
+            heartbeatAudioSource.Stop();
+        }
+
         HideExtraUI();
 
-        
         if (losePanel != null) losePanel.SetActive(true);
 
-        
         Invoke("ShowJumpscare", loseTextDuration);
     }
 
     private void ShowJumpscare()
     {
-        
         if (losePanel != null) losePanel.SetActive(false);
 
-        
         if (jumpscareImage != null) jumpscareImage.SetActive(true);
         if (jumpscareAudioSource != null) jumpscareAudioSource.Play();
 
-        
         Invoke("LoadLoseScene", jumpscareDuration);
     }
-    
 
     private void HideExtraUI()
     {

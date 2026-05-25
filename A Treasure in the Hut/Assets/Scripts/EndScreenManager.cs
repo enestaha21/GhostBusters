@@ -8,7 +8,6 @@ public class EndScreenManager : MonoBehaviour
 
     void Start()
     {
-        
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
